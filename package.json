@@ -4,7 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "deploy": "npx hardhat run scripts/deploy.ts --network localhost",
+    "compile": "npx hardhat compile",
+    "serve": "npx hardhat node",
+    "test": "npx hardhat test"
   },
   "keywords": [],
   "author": "",
