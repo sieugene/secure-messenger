@@ -37,12 +37,12 @@ contract SecureMessenger {
         encryptedMessages[msg.sender].push(newMessage);
     }
 
-    function getEncryptedMessages()
+    function getEncryptedMessages(address participant)
         external
         view
         onlyParticipants
         returns (EncryptedMessage[] memory)
     {
-        return encryptedMessages[msg.sender];
+        return encryptedMessages[participant];
     }
 }
