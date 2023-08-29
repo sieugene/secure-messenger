@@ -16,14 +16,14 @@ const participant2PrivateKey = secp256k1.keyFromPrivate(bcrypt.hashSync(particip
 const participant2PublicKey = participant2PrivateKey.getPublic();
 
 
-function encryptMessage(message: string, publicKey: curve.base.BasePoint): string {
+function encryptMessage(message: string, publicKey: curve.base.BasePoint) {
     const sharedSecret = participant1PrivateKey.derive(publicKey);
     const sharedSecretBuffer = Buffer.from(sharedSecret.toArray()); // Преобразование в буфер
     const iv = crypto.randomBytes(12);
     const cipher = crypto.createCipheriv('aes-256-gcm', sharedSecretBuffer, iv, { authTagLength: 16 });
     const encrypted = Buffer.concat([cipher.update(message, 'utf-8'), cipher.final()]);
     const authTag = cipher.getAuthTag();
-    return Buffer.concat([iv, authTag, encrypted]).toString('hex');
+    return Buffer.concat([iv, authTag, encrypted])
 }
 
 function decryptMessage(encryptedMessageHex: string, privateKey: EC.KeyPair): string {
@@ -42,7 +42,7 @@ function decryptMessage(encryptedMessageHex: string, privateKey: EC.KeyPair): st
 const originalMessage = 'Hello, world!';
 const encryptedMessage = encryptMessage(originalMessage, participant2PublicKey);
 console.log('Зашифрованное сообщение:', encryptedMessage);
-const decryptedMessage = decryptMessage(encryptedMessage, participant1PrivateKey);
+const decryptedMessage = decryptMessage(encryptedMessage.toString("hex"), participant1PrivateKey);
 console.log('Расшифрованное сообщение:', decryptedMessage);
 
 
@@ -54,5 +54,8 @@ console.log('Расшифрованное сообщение:', decryptedMessage
         return decryptMessage(encryptedMessage, participant1PrivateKey);
     }
 }
+
+
+
 
 export const SecureTool = new Tool()
